@@ -1,0 +1,42 @@
+import requests
+import json
+from datetime import datetime, timedelta
+
+API_KEY = 'your_api_key_here'
+BASE_URL = 'http://api.openweathermap.org/data/2.5/onecall/timemachine'
+
+# Список городов (пример: Москва, Нью-Йорк, Лондон)
+cities = {
+    "Moscow": {"lat": 55.7558, "lon": 37.6173},
+    "New York": {"lat": 40.7128, "lon": -74.0060},
+    "London": {"lat": 51.5074, "lon": -0.1278},
+}
+
+# Получение данных за последние 30 дней
+def get_weather_data(city_name, lat, lon):
+    results = []
+    for days_ago in range(30):
+        date = datetime.now() - timedelta(days=days_ago)
+        timestamp = int(date.timestamp())
+        response = requests.get(
+            f"{BASE_URL}?lat={lat}&lon={lon}&dt={timestamp}&appid={API_KEY}&units=metric"
+        )
+        if response.status_code == 200:
+            data = response.json()
+            results.append({
+                "city": city_name,
+                "date": date.strftime('%Y-%m-%d'),
+                "temperature": data['current']['temp'],
+                "weather": data['current']['weather'][0]['description']
+            })
+    return results
+
+# Сбор данных для каждого города
+weather_data = []
+for city, coords in cities.items():
+    data = get_weather_data(city, coords['lat'], coords['lon'])
+    weather_data.extend(data)
+
+# Сохранение данных в JSON-файл
+with open('weather_data.json', 'w') as f:
+    json.dump(weather_data, f, indent=4)
