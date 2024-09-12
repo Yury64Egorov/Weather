@@ -1,0 +1,16 @@
+# Команда для загрузки файла в HDFS
+hadoop fs -put weather_data.json /user/your_hdfs_directory/weather_data.json
+
+from hdfs import InsecureClient
+
+client = InsecureClient('http://localhost:50070', user='your_hdfs_user')
+
+# Загрузка файла в HDFS
+client.upload('/user/your_hdfs_directory/weather_data.json', 'weather_data.json')
+
+# Команда для выгрузки файла из HDFS на локальный компьютер
+hadoop fs -get /user/your_hdfs_directory/weather_data.json ./local_weather_data.json
+
+# Скачивание файла из HDFS на локальную машину
+client.download('/user/your_hdfs_directory/weather_data.json', 'local_weather_data.json')
+
