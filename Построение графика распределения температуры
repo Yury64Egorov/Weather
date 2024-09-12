@@ -1,0 +1,8 @@
+import seaborn as sns
+
+plt.figure(figsize=(10, 6))
+sns.histplot(weather_df['temperature'], kde=True)
+plt.title('Распределение температуры за последний месяц')
+plt.xlabel('Температура (°C)')
+plt.ylabel('Частота')
+plt.show()
