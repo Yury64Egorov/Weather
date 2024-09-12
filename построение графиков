@@ -1,0 +1,19 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Загрузка данных
+weather_df = pd.read_json('weather_data.json')
+
+# Построение графика изменений температуры
+plt.figure(figsize=(10, 6))
+for city in weather_df['city'].unique():
+    city_data = weather_df[weather_df['city'] == city]
+    plt.plot(city_data['date'], city_data['temperature'], label=city)
+
+plt.title('Изменение температуры за последний месяц')
+plt.xlabel('Дата')
+plt.ylabel('Температура (°C)')
+plt.legend()
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
